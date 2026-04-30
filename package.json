@@ -7,7 +7,7 @@
     ".": "./rt-native.js"
   },
   "files": [
-    "rt-native.js"
+    "rt-native.js",
     "README.md",
     "LICENSE"
   ],
@@ -32,13 +32,13 @@
     "email": "rkueter@gmail.com"
   },
   "license": "MIT",
-  "homepage": "https://github.com/rkueter/rt-native#readme",
+  "homepage": "https://github.com/ryankueter/rt-native",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rkueter/rt-native.git"
   },
   "bugs": {
-    "url": "https://github.com/rkueter/rt-native/issues"
+    "url": "https://github.com/ryankueter/rt-native"
   },
   "engines": {
     "node": ">=14"

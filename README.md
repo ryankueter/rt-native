@@ -7,9 +7,10 @@
 ## Table of Contents
 
 1. [Files](#files)
-2. [Quick Start](#quick-start)
-3. [HTML Attributes](#html-attributes)
-4. [JavaScript API](#javascript-api)
+2. [Installation](#installation)
+3. [Quick Start](#quick-start)
+4. [HTML Attributes](#html-attributes)
+5. [JavaScript API](#javascript-api)
    - [getValue()](#getvalue)
    - [getPlainText()](#getplaintext)
    - [setValue()](#setvalue)
@@ -18,8 +19,8 @@
    - [setPreviewCssFiles()](#setpreviewcssfiles)
    - [setPreviewCssFile()](#setpreviewcssfile)
    - [setPreviewCss()](#setpreviewcss)
-5. [Events](#events)
-6. [CSS Variables](#css-variables)
+6. [Events](#events)
+7. [CSS Variables](#css-variables)
    - [Toolbar](#toolbar-variables)
    - [Buttons](#button-variables)
    - [Content Area](#content-area-variables)
@@ -28,8 +29,8 @@
    - [Blockquote](#blockquote-variables)
    - [Code / Pre](#code--pre-variables)
    - [Modals & Dialogs](#modal--dialog-variables)
-7. [Theming with CSS Classes](#theming-with-css-classes)
-8. [configure() Reference](#configure-reference)
+8. [Theming with CSS Classes](#theming-with-css-classes)
+9. [configure() Reference](#configure-reference)
    - [toolbar](#toolbar-options)
    - [button](#button-options)
    - [content](#content-options)
@@ -39,12 +40,12 @@
    - [quote](#quote-options)
    - [code](#code-options)
    - [visibility](#visibility-options)
-9. [Preview Window Styling](#preview-window-styling)
-10. [Toolbar Buttons](#toolbar-buttons)
-11. [Keyboard Shortcuts](#keyboard-shortcuts)
-12. [Accessibility](#accessibility)
-13. [Multiple Instances](#multiple-instances)
-14. [Browser Support](#browser-support)
+10. [Preview Window Styling](#preview-window-styling)
+11. [Toolbar Buttons](#toolbar-buttons)
+12. [Keyboard Shortcuts](#keyboard-shortcuts)
+13. [Accessibility](#accessibility)
+14. [Multiple Instances](#multiple-instances)
+15. [Browser Support](#browser-support)
 
 ---
 
@@ -53,8 +54,45 @@
 | File | Purpose |
 |---|---|
 | `rt-native.js` | **The only required file.** Contains the complete editor engine, web component wrapper, all CSS defaults, and all dialog styles — everything is self-contained. |
-| `preview1.css` | Optional. Example preview stylesheet — base text, headings, links, blockquotes, and code/pre styles. Load with `setPreviewCssFiles()`. |
-| `preview2.css` | Optional. Example preview stylesheet — tables, lists, images, and horizontal rules. Load with `setPreviewCssFiles()`. |
+
+---
+
+## Installation
+
+**npm**
+
+```bash
+npm install rt-native
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="module">
+        import '/node_modules/rt-native/rt-native.js';
+    </script>
+</head>
+<body>
+    <rt-native id="editor" height="400px"></rt-native>
+</body>
+</html>
+```
+
+**CDN — unpkg**
+
+```html
+<script src="https://unpkg.com/rt-native/rt-native.js"></script>
+```
+
+**CDN — jsDelivr**
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/rt-native/rt-native.js"></script>
+```
 
 ---
 
@@ -201,7 +239,7 @@ Sets one or more CSS files to apply to **both the editor content area and the pr
 
 ```js
 // Load two stylesheets
-editor.setPreviewCssFiles('preview1.css', 'preview2.css');
+editor.setPreviewCssFiles('/styles/content.css', '/styles/tables.css');
 
 // Load a single file
 editor.setPreviewCssFiles('/styles/my-content.css');
@@ -678,17 +716,6 @@ When you load preview CSS with `setPreviewCssFiles()` or `setPreviewCss()`, the 
 
 2. **Preview window** — Content is rendered inside an `<iframe srcdoc>` with a completely isolated browsing context. The preview shows exactly what a reader would see in production with a clean browser baseline.
 
-### Using the example stylesheets
-
-```js
-editor.setPreviewCssFiles('preview1.css', 'preview2.css');
-```
-
-| File | Covers |
-|---|---|
-| `preview1.css` | `p`, `strong`, `em`, `h1`–`h6`, `a`, `blockquote`, `code`, `pre` |
-| `preview2.css` | `table`, `thead`, `th`, `td`, `ul`, `ol`, `li`, `img`, `hr` |
-
 ### Writing your own preview CSS
 
 Write plain CSS — no special selectors, no ID prefixes, no scoping wrappers needed:
@@ -846,7 +873,7 @@ Each `<rt-native>` element is fully isolated. You can place as many on a page as
     document.getElementById('editor-1').configure({
         visibility: { clearAll: true, bold: true, italic: true }
     });
-    document.getElementById('editor-2').setPreviewCssFiles('preview1.css', 'preview2.css');
+    document.getElementById('editor-2').setPreviewCssFiles('/styles/content.css');
     document.getElementById('editor-3').configure({ editor: { height: '400px' } });
 </script>
 ```
