@@ -1,0 +1,52 @@
+{
+  "name": "rt-native",
+  "version": "1.0.100",
+  "description": "rt-native HTML Editor is a free native web component that provides accessibility features and a wide variety of elements and customizations that make it one of the most robust and flexible HTML editors available. It allows the programmer to apply custom .css files to the preview window, so see how the content will be displayed in production. The editor uses embedded .svg Google Font Icons and the shadow DOM to isolate the HTML from inheriting the existing page styles. No frameworks, no build step, no dependencies — drop one script tag into any HTML page and you're done.",
+  "main": "rt-native.js",
+  "exports": {
+    ".": "./rt-native.js"
+  },
+  "files": [
+    "rt-native.js"
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "rich-text-editor",
+	"rich-textbox",
+	"text-editor",
+    "web-component",
+    "custom-element",
+	"html-editor",
+    "wysiwyg",
+    "editor",
+    "contenteditable",
+    "rte",
+    "no-framework",
+    "zero-dependency",
+    "shadow-dom",
+    "native"
+  ],
+  "author": {
+    "name": "Ryan A. Kueter",
+    "email": "rkueter@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/rkueter/rt-native#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rkueter/rt-native.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rkueter/rt-native/issues"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "browserslist": [
+    "Chrome >= 67",
+    "Firefox >= 63",
+    "Safari >= 12.1",
+    "Edge >= 79"
+  ]
+}

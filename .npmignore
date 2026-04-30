@@ -1,0 +1,6 @@
+# Development / demo files — not published to npm
+index.html
+*.test.js
+*.spec.js
+.DS_Store
+Thumbs.db
