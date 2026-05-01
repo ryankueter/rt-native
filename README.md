@@ -297,7 +297,7 @@ Read-only mode can also be set declaratively via the **readonly** HTML attribute
 
 ### setPreviewCssFiles()
 
-Sets one or more CSS files to apply to **both the editor content area and the preview window**. Rules are automatically scoped so they only style the HTML being edited — the toolbar, menus, and dialogs are never affected. Call with no arguments to remove all files.
+Sets one or more CSS files to apply to the preview window. Rules are automatically scoped so they only style the HTML being edited — the toolbar, menus, and dialogs are never affected. Call with no arguments to remove all files.
 
 ```js
 // Load two stylesheets
@@ -325,7 +325,7 @@ editor.setPreviewCssFile('');
 
 ### setPreviewCss()
 
-Supplies **inline CSS** to apply to both the editor content area and the preview window. Rules are automatically scoped, exactly like **setPreviewCssFiles()**. Call with no argument (or '') to clear.
+Supplies **inline CSS** to apply to both the preview window. Rules are automatically scoped, exactly like **setPreviewCssFiles()**. Call with no argument (or '') to clear.
 
 ```js
 editor.setPreviewCss(`
@@ -702,11 +702,7 @@ rt-native.fluent-dark {
 
 ## Preview Window Styling
 
-When you load preview CSS with **setPreviewCssFiles()** or **setPreviewCss()**, the component applies the styles in two places simultaneously:
-
-1. **Editor content area** — CSS files are fetched, every selector is automatically prefixed with .rich-text-box-content, and the scoped rules are injected into the editor's shadow root. You see your production styles while you type, with no risk of styles escaping to the toolbar, menus, or the surrounding page.
-
-2. **Preview window** — Content is rendered inside an iframe srcdoc with a completely isolated browsing context. The preview shows exactly what a reader would see in production with a clean browser baseline.
+When you load preview CSS with **setPreviewCssFiles()** or **setPreviewCss()**, the component applies the styles to the Preview window. Content is rendered inside an iframe srcdoc with a completely isolated browsing context. The preview shows exactly what a reader would see in production with a clean browser baseline.
 
 ```js
 editor.setPreviewCssFiles('my-content.css');
