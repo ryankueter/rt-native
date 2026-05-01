@@ -35,7 +35,7 @@
   "homepage": "https://github.com/ryankueter/rt-native",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rkueter/rt-native.git"
+    "url": "git+https://github.com/ryankueter/rt-native"
   },
   "bugs": {
     "url": "https://github.com/ryankueter/rt-native"
