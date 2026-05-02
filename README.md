@@ -342,6 +342,10 @@ editor.setPreviewCss('');
 
 **setPreviewCss()** and **setPreviewCssFiles()** are independent — both can be active at the same time. File rules are applied first; inline rules are appended after, so inline CSS always wins when there is a conflict.
 
+### At-rules
+
+@media, @supports, @layer, and @container blocks are handled correctly — selectors inside them are scoped. Other at-rules (@keyframes, @font-face, etc.) are passed through unchanged.
+
 ---
 
 ## Events
@@ -707,10 +711,6 @@ When you load preview CSS with **setPreviewCssFiles()** or **setPreviewCss()**, 
 ```js
 editor.setPreviewCssFiles('my-content.css');
 ```
-
-### At-rules
-
-@media, @supports, @layer, and @container blocks are handled correctly — selectors inside them are scoped. Other at-rules (@keyframes, @font-face, etc.) are passed through unchanged.
 
 ---
 
