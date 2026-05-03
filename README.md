@@ -3,7 +3,7 @@
 **Author:** Ryan Kueter  
 **Updated:** May, 2026
 
-**rt-native.js** HTML Editor is a free native web component that provides accessibility features and a wide variety of elements and customizations that make it one of the most robust and flexible HTML editors available. It allows the programmer to apply custom .css files to the preview window, so see how the content will be displayed in production. The editor uses embedded .svg Google Font Icons and the shadow DOM to isolate the HTML from inheriting the existing page styles. No frameworks, no build step, no dependencies — drop **one script tag** into any HTML page and you're done.
+**rt-native.js** HTML Editor is a free native web component that provides accessibility features and a wide variety of elements and customizations that make it one of the most robust and flexible HTML editors available. It allows the programmer to apply custom .css files to the preview window, to see how the content will be displayed in production. The editor uses embedded .svg Google Font Icons and the shadow DOM to isolate the HTML from inheriting the existing page styles. No frameworks, no build step, no dependencies — drop **one script tag** into any HTML page and you're done.
 
 ---
 
