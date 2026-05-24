@@ -13,28 +13,28 @@
 3. [Quick Start](#quick-start)
 4. [HTML Attributes](#html-attributes)
 5. [JavaScript API](#javascript-api)
-  - [getValue()](#getvalue)
-  - [getPlainText()](#getplaintext)
-  - [setValue()](#setvalue)
-  - [configure()](#configure)
-  - [setReadOnly()](#setreadonly)
-  - [setPreviewCssFiles()](#setpreviewcssfiles)
-  - [setPreviewCssFile()](#setpreviewcssfile)
-  - [setPreviewCss()](#setpreviewcss)
-  - [addCustomButton()](#addcustombutton)
-  - [setCustomButtons()](#setcustombuttons)
-  - [removeCustomButton()](#removecustombutton)
-  - [clearCustomButtons()](#clearcustombuttons)
+   - [getValue()](#getvalue)
+   - [getPlainText()](#getplaintext)
+   - [setValue()](#setvalue)
+   - [configure()](#configure)
+   - [setReadOnly()](#setreadonly)
+   - [setPreviewCssFiles()](#setpreviewcssfiles)
+   - [setPreviewCssFile()](#setpreviewcssfile)
+   - [setPreviewCss()](#setpreviewcss)
+   - [addCustomButton()](#addcustombutton)
+   - [setCustomButtons()](#setcustombuttons)
+   - [removeCustomButton()](#removecustombutton)
+   - [clearCustomButtons()](#clearcustombuttons)
 6. [Events](#events)
 7. [CSS Variables](#css-variables)
-  - [Toolbar](#toolbar-variables)
-  - [Buttons](#button-variables)
-  - [Content Area](#content-area-variables)
-  - [Editor Container](#editor-container-variables)
-  - [Scrollbars](#scrollbar-variables)
-  - [Blockquote](#blockquote-variables)
-  - [Code / Pre](#code--pre-variables)
-  - [Modals & Dialogs](#modal--dialog-variables)
+   - [Toolbar](#toolbar-variables)
+   - [Buttons](#button-variables)
+   - [Content Area](#content-area-variables)
+   - [Editor Container](#editor-container-variables)
+   - [Scrollbars](#scrollbar-variables)
+   - [Blockquote](#blockquote-variables)
+   - [Code / Pre](#code--pre-variables)
+   - [Modals & Dialogs](#modal--dialog-variables)
 8. [Theming with CSS Classes](#theming-with-css-classes)
 9. [Preview Window Styling](#preview-window-styling)
 10. [Toolbar Buttons](#toolbar-buttons)
@@ -366,13 +366,13 @@ editor.addCustomButton({
 });
 ```
 
-| Property | Type | Required | Description |
-| --- | --- | --- | --- |
-| id | string | yes | Unique identifier for the button. |
-| title | string | — | Tooltip text and accessible label. Defaults to `id`. |
-| svg | string | — | SVG markup rendered as the button icon. |
-| onClick | Function \| string | — | Called when the button is clicked. A string is resolved as a dot-path on `window` (e.g. `'myApp.handleStamp'`). Receives `(event, editor, instance)`. |
-| disabled | boolean | — | When `true` the button is rendered but not clickable. |
+| Property | Type | Required | Description |  |
+| --- | --- | --- | --- | --- |
+| id | string | yes | Unique identifier for the button. |  |
+| title | string | — | Tooltip text and accessible label. Defaults to `id`. |  |
+| svg | string | — | SVG markup rendered as the button icon. |  |
+| onClick | Function \\ | string | — | Called when the button is clicked. A string is resolved as a dot-path on `window` (e.g. `'myApp.handleStamp'`). Receives `(event, editor, instance)`. |
+| disabled | boolean | — | When `true` the button is rendered but not clickable. |  |
 
 ### setCustomButtons()
 
