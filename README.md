@@ -1,7 +1,6 @@
-# rt-native — Native Web Component Rich Text Editor
+# rt-native - Rich Text Editor
 
-**Author:** Ryan Kueter  
-**Updated:** May, 2026
+**Author:** Ryan Kueter | **Updated:** May, 2026
 
 **rt-native.js** HTML Editor is a free native web component that provides accessibility features and a wide variety of elements and customizations that make it one of the most robust and flexible HTML editors available. It allows the programmer to apply custom .css files to the preview window, to see how the content will be displayed in production. The editor uses embedded .svg Google Font Icons and the shadow DOM to isolate the HTML from inheriting the existing page styles. No frameworks, no build step, no dependencies — drop **one script tag** into any HTML page and you're done.
 
@@ -14,24 +13,28 @@
 3. [Quick Start](#quick-start)
 4. [HTML Attributes](#html-attributes)
 5. [JavaScript API](#javascript-api)
-   - [getValue()](#getvalue)
-   - [getPlainText()](#getplaintext)
-   - [setValue()](#setvalue)
-   - [configure()](#configure)
-   - [setReadOnly()](#setreadonly)
-   - [setPreviewCssFiles()](#setpreviewcssfiles)
-   - [setPreviewCssFile()](#setpreviewcssfile)
-   - [setPreviewCss()](#setpreviewcss)
+  - [getValue()](#getvalue)
+  - [getPlainText()](#getplaintext)
+  - [setValue()](#setvalue)
+  - [configure()](#configure)
+  - [setReadOnly()](#setreadonly)
+  - [setPreviewCssFiles()](#setpreviewcssfiles)
+  - [setPreviewCssFile()](#setpreviewcssfile)
+  - [setPreviewCss()](#setpreviewcss)
+  - [addCustomButton()](#addcustombutton)
+  - [setCustomButtons()](#setcustombuttons)
+  - [removeCustomButton()](#removecustombutton)
+  - [clearCustomButtons()](#clearcustombuttons)
 6. [Events](#events)
 7. [CSS Variables](#css-variables)
-   - [Toolbar](#toolbar-variables)
-   - [Buttons](#button-variables)
-   - [Content Area](#content-area-variables)
-   - [Editor Container](#editor-container-variables)
-   - [Scrollbars](#scrollbar-variables)
-   - [Blockquote](#blockquote-variables)
-   - [Code / Pre](#code--pre-variables)
-   - [Modals & Dialogs](#modal--dialog-variables)
+  - [Toolbar](#toolbar-variables)
+  - [Buttons](#button-variables)
+  - [Content Area](#content-area-variables)
+  - [Editor Container](#editor-container-variables)
+  - [Scrollbars](#scrollbar-variables)
+  - [Blockquote](#blockquote-variables)
+  - [Code / Pre](#code--pre-variables)
+  - [Modals & Dialogs](#modal--dialog-variables)
 8. [Theming with CSS Classes](#theming-with-css-classes)
 9. [Preview Window Styling](#preview-window-styling)
 10. [Toolbar Buttons](#toolbar-buttons)
@@ -45,7 +48,7 @@
 ## Files
 
 | File | Purpose |
-|---|---|
+| --- | --- |
 | rt-native.js | **The only required file.** Contains the complete editor engine, web component wrapper, all CSS defaults, and all dialog styles — everything is self-contained. |
 
 ---
@@ -125,7 +128,7 @@ npm install rt-native
 ## HTML Attributes
 
 | Attribute | Type | Default | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | value | string | '' | Initial HTML content of the editor. |
 | width | string | 100% | Editor width. Any valid CSS value (px, %, vw, etc.). |
 | height | string | 300px | Editor height. Any valid CSS value. |
@@ -222,7 +225,7 @@ editor.configure({
 **All visibility keys:**
 
 | Key | Controls |
-|---|---|
+| --- | --- |
 | font | Font family dropdown |
 | size | Font size dropdown |
 | format | Paragraph / heading format dropdown |
@@ -346,6 +349,58 @@ editor.setPreviewCss('');
 
 @media, @supports, @layer, and @container blocks are handled correctly — selectors inside them are scoped. Other at-rules (@keyframes, @font-face, etc.) are passed through unchanged.
 
+### addCustomButton()
+
+Adds a single custom button to the right end of the toolbar (after the built-in buttons). If a button with the same `id` already exists it is replaced in-place. The toolbar rebuilds automatically.
+
+```js
+editor.addCustomButton({
+    id:      'my-stamp',
+    title:   'Insert Stamp',
+    svg:     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="M160-120v-80h640v80H160Zm0-120v-80l320-400-320-400v-80h640v80L480-720l320 400v80H160Z"/>
+              </svg>`,
+    onClick: (event, editor) => {
+        editor.setValue(editor.getValue() + '<p>🔖 Stamp inserted.</p>');
+    }
+});
+```
+
+| Property | Type | Required | Description |
+| --- | --- | --- | --- |
+| id | string | yes | Unique identifier for the button. |
+| title | string | — | Tooltip text and accessible label. Defaults to `id`. |
+| svg | string | — | SVG markup rendered as the button icon. |
+| onClick | Function \| string | — | Called when the button is clicked. A string is resolved as a dot-path on `window` (e.g. `'myApp.handleStamp'`). Receives `(event, editor, instance)`. |
+| disabled | boolean | — | When `true` the button is rendered but not clickable. |
+
+### setCustomButtons()
+
+Replaces **all** custom toolbar buttons at once.
+
+```js
+editor.setCustomButtons([
+    { id: 'stamp', title: 'Stamp', svg: '…', onClick: handleStamp },
+    { id: 'sign',  title: 'Sign',  svg: '…', onClick: handleSign  },
+]);
+```
+
+### removeCustomButton()
+
+Removes the custom button with the given `id`.
+
+```js
+editor.removeCustomButton('stamp');
+```
+
+### clearCustomButtons()
+
+Removes **all** custom toolbar buttons.
+
+```js
+editor.clearCustomButtons();
+```
+
 ---
 
 ## Events
@@ -362,8 +417,26 @@ editor.addEventListener('change', (event) => {
 ```
 
 | Property | Value |
-|---|---|
+| --- | --- |
 | event.detail.value | Current editor HTML as a string |
+| event.bubbles | true |
+| event.composed | true |
+
+### custom-button-click
+
+Fired whenever a custom toolbar button is clicked. The event **bubbles** and is **composed**.
+
+```js
+editor.addEventListener('custom-button-click', (event) => {
+    console.log('Custom button clicked:', event.detail.id);
+});
+```
+
+| Property | Value |
+| --- | --- |
+| event.detail.id | The `id` of the button that was clicked |
+| event.detail.button | The full button definition object |
+| event.detail.editor | The `rt-native` element |
 | event.bubbles | true |
 | event.composed | true |
 
@@ -394,7 +467,7 @@ rt-native {
 ### Toolbar Variables
 
 | Variable | Default | Description |
-|---|---|---|
+| --- | --- | --- |
 | --rtb-toolbar-bg | #FFF | Toolbar background color |
 | --rtb-toolbar-border-style | solid | Toolbar bottom border style |
 | --rtb-toolbar-border-width | 1px | Toolbar bottom border width |
@@ -410,7 +483,7 @@ rt-native {
 ### Button Variables
 
 | Variable | Default | Description |
-|---|---|---|
+| --- | --- | --- |
 | --rtb-btn-text | #000 | Button icon color |
 | --rtb-btn-size | 16px | Icon size (also drives button min-height and divider height) |
 | --rtb-btn-font | Arial, sans-serif | Font for dropdown buttons |
@@ -429,7 +502,7 @@ rt-native {
 ### Content Area Variables
 
 | Variable | Default | Description |
-|---|---|---|
+| --- | --- | --- |
 | --rtb-content-text | #000 | Editor text color |
 | --rtb-content-size | 16px | Editor font size |
 | --rtb-content-font | Arial, sans-serif | Editor font family |
@@ -442,7 +515,7 @@ rt-native {
 ### Editor Container Variables
 
 | Variable | Default | Description |
-|---|---|---|
+| --- | --- | --- |
 | --rtb-editor-width | 100% | Maximum width of the editor |
 | --rtb-editor-height | 300px | Height of the editor |
 | --rtb-editor-border-style | solid | Outer border style |
@@ -458,7 +531,7 @@ rt-native {
 ### Scrollbar Variables
 
 | Variable | Default | Description |
-|---|---|---|
+| --- | --- | --- |
 | --rtb-scroll-width | 10px | Scrollbar track width |
 | --rtb-scroll-opacity | 1 | Scrollbar opacity |
 | --rtb-scroll-bg | transparent | Scrollbar track background |
@@ -471,7 +544,7 @@ rt-native {
 ### Blockquote Variables
 
 | Variable | Default | Description |
-|---|---|---|
+| --- | --- | --- |
 | --rtb-quote-bg | #f9f9f9 | Blockquote background color |
 | --rtb-quote-border-color | #ccc | Blockquote left-border color |
 | --rtb-quote-border-width | 5px | Blockquote left-border width |
@@ -481,7 +554,7 @@ rt-native {
 ### Code / Pre Variables
 
 | Variable | Default | Description |
-|---|---|---|
+| --- | --- | --- |
 | --rtb-code-bg | #f9f9f9 | Code block background color |
 | --rtb-code-border-radius | 10px | Code block corner radius |
 
@@ -490,7 +563,7 @@ rt-native {
 ### Modal / Dialog Variables
 
 | Variable | Default | Description |
-|---|---|---|
+| --- | --- | --- |
 | --rtb-modal-bg | #fefefe | Dialog background color |
 | --rtb-modal-text | #000 | Dialog text and close-button color |
 | --rtb-modal-text-size | 16px | Dialog font size |
@@ -529,11 +602,13 @@ rt-native.dark {
 ```
 
 **Apply via HTML:**
+
 ```html
 <rt-native class="dark" id="editor" height="400px"></rt-native>
 ```
 
 **Apply via JavaScript:**
+
 ```js
 var editor = document.getElementById("editor");
 if (editor) {
@@ -548,6 +623,7 @@ if (editor) {
 ```
 
 **Apply via media query (system dark mode):**
+
 ```css
 @media (prefers-color-scheme: dark) {
     rt-native {
@@ -702,6 +778,7 @@ rt-native.fluent-dark {
 ```html
 <rt-native class="fluent-dark" id="editor" height="400px"></rt-native>
 ```
+
 ---
 
 ## Preview Window Styling
@@ -719,7 +796,7 @@ editor.setPreviewCssFiles('my-content.css');
 Buttons appear left-to-right in the order listed. Dividers separate logical groups.
 
 | Button | Action | Shortcut |
-|---|---|---|
+| --- | --- | --- |
 | Font | Set font family | — |
 | Size | Set font size | Ctrl+Shift+< / Ctrl+Shift+> |
 | Format | Apply block format (paragraph, headings 1–6) | Ctrl+Shift+D / Ctrl+Shift+1–6 |
@@ -753,11 +830,11 @@ Buttons appear left-to-right in the order listed. Dividers separate logical grou
 | Embed Media | Open media embed dialog (audio, PDF, iframe) | Ctrl+Shift+M |
 | Video | Open video embed dialog | Ctrl+Shift+V |
 | Insert Table | Open table dialog | Ctrl+Shift+L |
-| Code Block | Open code block dialog | Ctrl+Shift+* |
-| Horizontal Rule | Insert \<hr\> at cursor position | Ctrl+Shift+H |
+| Code Block | Open code block dialog | Ctrl+Shift+\* |
+| Horizontal Rule | Insert \\<hr> at cursor position | Ctrl+Shift+H |
 | Undo | Undo last action | Ctrl+Z |
 | Redo | Redo last action | Ctrl+Y |
-| Toggle Status Bar | Show / hide the word and character count bar | Ctrl+\ |
+| Toggle Status Bar | Show / hide the word and character count bar | Ctrl+\\ |
 | Save HTML | Download editor content as an .html file | Ctrl+Shift+S |
 | HTML Source | Toggle raw HTML source view | Ctrl+Shift+A |
 | Preview | Open preview dialog | Ctrl+Shift+P |
@@ -766,49 +843,49 @@ Buttons appear left-to-right in the order listed. Dividers separate logical grou
 
 ## Keyboard Shortcuts
 
-All shortcuts are active when the editor content area has focus. The Ctrl+\ and Ctrl+Shift+A/P/S shortcuts also work when the HTML source textarea has focus.
+All shortcuts are active when the editor content area has focus. The Ctrl+\\ and Ctrl+Shift+A/P/S shortcuts also work when the HTML source textarea has focus.
 
 | Category | Action | Shortcut |
-|---|---|---|
+| --- | --- | --- |
 | **Formatting** | Bold | Ctrl+B |
-| | Italic | Ctrl+I |
-| | Underline | Ctrl+U |
-| | Strikethrough | Ctrl+D |
-| | Subscript | Ctrl+= |
-| | Superscript | Ctrl+Shift++ |
+|  | Italic | Ctrl+I |
+|  | Underline | Ctrl+U |
+|  | Strikethrough | Ctrl+D |
+|  | Subscript | Ctrl+= |
+|  | Superscript | Ctrl+Shift++ |
 | **Color** | Text color | Ctrl+Shift+C |
-| | Text background color | Ctrl+Shift+B |
+|  | Text background color | Ctrl+Shift+B |
 | **Alignment** | Align left | Ctrl+L |
-| | Align center | Ctrl+E |
-| | Align right | Ctrl+R |
-| | Justify | Ctrl+J |
+|  | Align center | Ctrl+E |
+|  | Align right | Ctrl+R |
+|  | Justify | Ctrl+J |
 | **Editing** | Cut | Ctrl+X |
-| | Copy | Ctrl+C |
-| | Paste | Ctrl+V |
-| | Select all | Ctrl+A |
-| | Undo | Ctrl+Z |
-| | Redo | Ctrl+Y |
+|  | Copy | Ctrl+C |
+|  | Paste | Ctrl+V |
+|  | Select all | Ctrl+A |
+|  | Undo | Ctrl+Z |
+|  | Redo | Ctrl+Y |
 | **Lists** | Ordered list | Ctrl+Shift+O |
-| | Unordered list | Ctrl+Shift+U |
-| | Increase indent | Tab |
-| | Decrease indent | Shift+Tab |
+|  | Unordered list | Ctrl+Shift+U |
+|  | Increase indent | Tab |
+|  | Decrease indent | Shift+Tab |
 | **Insert** | Insert link | Ctrl+Shift+K |
-| | Insert image | Ctrl+Shift+I |
-| | Upload image | Ctrl+Shift+& |
-| | Block quote | Ctrl+Shift+Q |
-| | Video | Ctrl+Shift+V |
-| | Embed media | Ctrl+Shift+M |
-| | Insert table | Ctrl+Shift+L |
-| | Code block | Ctrl+Shift+* |
-| | Horizontal rule | Ctrl+Shift+H |
+|  | Insert image | Ctrl+Shift+I |
+|  | Upload image | Ctrl+Shift+& |
+|  | Block quote | Ctrl+Shift+Q |
+|  | Video | Ctrl+Shift+V |
+|  | Embed media | Ctrl+Shift+M |
+|  | Insert table | Ctrl+Shift+L |
+|  | Code block | Ctrl+Shift+\* |
+|  | Horizontal rule | Ctrl+Shift+H |
 | **Format** | Paragraph | Ctrl+Shift+D |
-| | Heading 1–6 | Ctrl+Shift+1 – Ctrl+Shift+6 |
-| | Increase font size | Ctrl+Shift+> |
-| | Decrease font size | Ctrl+Shift+< |
-| **View** | Toggle status bar | Ctrl+\ |
-| | Toggle HTML source | Ctrl+Shift+A |
-| | Preview | Ctrl+Shift+P |
-| | Save HTML | Ctrl+Shift+S |
+|  | Heading 1–6 | Ctrl+Shift+1 – Ctrl+Shift+6 |
+|  | Increase font size | Ctrl+Shift+> |
+|  | Decrease font size | Ctrl+Shift+< |
+| **View** | Toggle status bar | Ctrl+\\ |
+|  | Toggle HTML source | Ctrl+Shift+A |
+|  | Preview | Ctrl+Shift+P |
+|  | Save HTML | Ctrl+Shift+S |
 
 ---
 
