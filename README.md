@@ -203,7 +203,7 @@ editor.configure({
 editor.configure({
     visibility: {
         clearAll: true,
-        font: true, size: true, format: true, textStylesDivider: true,
+        font: true, size: true, format: true, insert: true, textStylesDivider: true,
         bold: true, italic: true, underline: true, strikethrough: true,
         subscript: true, superscript: true, formatDivider: true,
         textColor: true, textColorDivider: true,
@@ -229,7 +229,8 @@ editor.configure({
 | font | Font family dropdown |
 | size | Font size dropdown |
 | format | Paragraph / heading format dropdown |
-| textStylesDivider | Divider after the three dropdowns |
+| insert | Insert symbol / emoji dropdown |
+| textStylesDivider | Divider after the top dropdowns |
 | bold | Bold button |
 | italic | Italic button |
 | underline | Underline button |
