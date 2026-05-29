@@ -47,9 +47,9 @@
 
 ## Files
 
-| File | Purpose |
-| --- | --- |
-| rt-native.js | **The only required file.** Contains the complete editor engine, web component wrapper, all CSS defaults, and all dialog styles — everything is self-contained. |
+| File       | Purpose                                                                                                                                                       |
+|:-----------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|rt-native.js|**The only required file.** Contains the complete editor engine, web component wrapper, all CSS defaults, and all dialog styles — everything is self-contained.|
 
 ---
 
@@ -127,16 +127,16 @@ npm install rt-native
 
 ## HTML Attributes
 
-| Attribute | Type | Default | Description |
-| --- | --- | --- | --- |
-| value | string | '' | Initial HTML content of the editor. |
-| width | string | 100% | Editor width. Any valid CSS value (px, %, vw, etc.). |
-| height | string | 300px | Editor height. Any valid CSS value. |
-| placeholder | string | — | Placeholder text shown when the editor is empty. |
-| readonly | boolean (presence) | — | Puts the editor in read-only mode. Hides the toolbar. |
-| aria-label | string | 'Rich text editor' | Accessible name for the editor region. |
-| label | string | — | Alternative to **aria-label** for the accessible name. |
-| config | JSON string | — | Declarative configuration. Parsed and passed to **configure()** on connect. |
+| Attribute | Type             | Default          | Description                                                               |
+|:----------|:-----------------|:-----------------|:--------------------------------------------------------------------------|
+|value      |string            |''                |Initial HTML content of the editor.                                        |
+|width      |string            |100%              |Editor width. Any valid CSS value (px, %, vw, etc.).                       |
+|height     |string            |300px             |Editor height. Any valid CSS value.                                        |
+|placeholder|string            |—                 |Placeholder text shown when the editor is empty.                           |
+|readonly   |boolean (presence)|—                 |Puts the editor in read-only mode. Hides the toolbar.                      |
+|aria-label |string            |'Rich text editor'|Accessible name for the editor region.                                     |
+|label      |string            |—                 |Alternative to **aria-label** for the accessible name.                     |
+|config     |JSON string       |—                 |Declarative configuration. Parsed and passed to **configure()** on connect.|
 
 ### Example
 
@@ -224,55 +224,56 @@ editor.configure({
 
 **All visibility keys:**
 
-| Key | Controls |
-| --- | --- |
-| font | Font family dropdown |
-| size | Font size dropdown |
-| format | Paragraph / heading format dropdown |
-| insert | Insert symbol / emoji dropdown |
-| textStylesDivider | Divider after the top dropdowns |
-| bold | Bold button |
-| italic | Italic button |
-| underline | Underline button |
-| strikethrough | Strikethrough button |
-| subscript | Subscript button |
-| superscript | Superscript button |
-| formatDivider | Divider after text-format buttons |
-| textColor | Text color, background color, and remove-color buttons |
-| textColorDivider | Divider after color buttons |
-| alignLeft | Align left button |
-| alignCenter | Align center button |
-| alignRight | Align right button |
-| alignJustify | Justify button |
-| alignDivider | Divider after alignment buttons |
-| cut | Cut button |
-| copy | Copy button |
-| paste | Paste button |
-| delete | Delete button |
-| selectAll | Select all button |
-| actionDivider | Divider after clipboard buttons |
-| orderedList | Ordered list button |
-| unorderedList | Unordered list button |
-| indent | Increase / decrease indent buttons |
-| listDivider | Divider after list buttons |
-| link | Insert link and remove link buttons |
-| image | Insert image button |
-| imageUpload | Upload / embed image button |
-| quote | Block quote button |
-| codeBlock | Code block button |
-| embedMedia | Embed media (audio / PDF / iframe) button |
-| video | Video embed button |
-| table | Insert table button |
-| horizontalRule | Insert horizontal rule button |
-| mediaDivider | Divider after insert buttons |
-| undo | Undo button |
-| redo | Redo button |
-| historyDivider | Divider after undo / redo |
-| statusBarToggle | Toggle Status Bar button |
-| saveHtml | Save HTML file button |
-| htmlView | Toggle HTML source view button |
-| preview | Preview button |
-| wordCount | Status bar (word / character count) — hidden by default |
+| Key             | Controls                                              |
+|:----------------|:------------------------------------------------------|
+|font             |Font family dropdown                                   |
+|size             |Font size dropdown                                     |
+|format           |Paragraph / heading format dropdown                    |
+|insert           |Insert symbol / emoji dropdown                         |
+|textStylesDivider|Divider after the top dropdowns                        |
+|bold             |Bold button                                            |
+|italic           |Italic button                                          |
+|underline        |Underline button                                       |
+|strikethrough    |Strikethrough button                                   |
+|subscript        |Subscript button                                       |
+|superscript      |Superscript button                                     |
+|inlineCode       |Inline Code button                                     |
+|formatDivider    |Divider after text-format buttons                      |
+|textColor        |Text color, background color, and remove-color buttons |
+|textColorDivider |Divider after color buttons                            |
+|alignLeft        |Align left button                                      |
+|alignCenter      |Align center button                                    |
+|alignRight       |Align right button                                     |
+|alignJustify     |Justify button                                         |
+|alignDivider     |Divider after alignment buttons                        |
+|cut              |Cut button                                             |
+|copy             |Copy button                                            |
+|paste            |Paste button                                           |
+|delete           |Delete button                                          |
+|selectAll        |Select all button                                      |
+|actionDivider    |Divider after clipboard buttons                        |
+|orderedList      |Ordered list button                                    |
+|unorderedList    |Unordered list button                                  |
+|indent           |Increase / decrease indent buttons                     |
+|listDivider      |Divider after list buttons                             |
+|link             |Insert link and remove link buttons                    |
+|image            |Insert image button                                    |
+|imageUpload      |Upload / embed image button                            |
+|quote            |Block quote button                                     |
+|codeBlock        |Code block button                                      |
+|embedMedia       |Embed media (audio / PDF / iframe) button              |
+|video            |Video embed button                                     |
+|table            |Insert table button                                    |
+|horizontalRule   |Insert horizontal rule button                          |
+|mediaDivider     |Divider after insert buttons                           |
+|undo             |Undo button                                            |
+|redo             |Redo button                                            |
+|historyDivider   |Divider after undo / redo                              |
+|statusBarToggle  |Toggle Status Bar button                               |
+|saveHtml         |Save HTML file button                                  |
+|htmlView         |Toggle HTML source view button                         |
+|preview          |Preview button                                         |
+|wordCount        |Status bar (word / character count) — hidden by default|
 
 > **Divider auto-hiding:** Dividers are only rendered when at least one button in their group is visible *and* the divider's own key is true.
 
@@ -367,13 +368,13 @@ editor.addCustomButton({
 });
 ```
 
-| Property | Type | Required | Description |  |
-| --- | --- | --- | --- | --- |
-| id | string | yes | Unique identifier for the button. |  |
-| title | string | — | Tooltip text and accessible label. Defaults to `id`. |  |
-| svg | string | — | SVG markup rendered as the button icon. |  |
-| onClick | Function \\ | string | — | Called when the button is clicked. A string is resolved as a dot-path on `window` (e.g. `'myApp.handleStamp'`). Receives `(event, editor, instance)`. |
-| disabled | boolean | — | When `true` the button is rendered but not clickable. |  |
+| Property | Type      | Required | Description                                         |                                                                                                                                                     |
+|:---------|:----------|:---------|:----------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------|
+|id        |string     |yes       |Unique identifier for the button.                    |                                                                                                                                                     |
+|title     |string     |—         |Tooltip text and accessible label. Defaults to `id`. |                                                                                                                                                     |
+|svg       |string     |—         |SVG markup rendered as the button icon.              |                                                                                                                                                     |
+|onClick   |Function \\|string    |—                                                    |Called when the button is clicked. A string is resolved as a dot-path on `window` (e.g. `'myApp.handleStamp'`). Receives `(event, editor, instance)`.|
+|disabled  |boolean    |—         |When `true` the button is rendered but not clickable.|                                                                                                                                                     |
 
 ### setCustomButtons()
 
@@ -417,11 +418,11 @@ editor.addEventListener('change', (event) => {
 });
 ```
 
-| Property | Value |
-| --- | --- |
-| event.detail.value | Current editor HTML as a string |
-| event.bubbles | true |
-| event.composed | true |
+| Property         | Value                         |
+|:-----------------|:------------------------------|
+|event.detail.value|Current editor HTML as a string|
+|event.bubbles     |true                           |
+|event.composed    |true                           |
 
 ### custom-button-click
 
@@ -433,13 +434,13 @@ editor.addEventListener('custom-button-click', (event) => {
 });
 ```
 
-| Property | Value |
-| --- | --- |
-| event.detail.id | The `id` of the button that was clicked |
-| event.detail.button | The full button definition object |
-| event.detail.editor | The `rt-native` element |
-| event.bubbles | true |
-| event.composed | true |
+| Property          | Value                                 |
+|:------------------|:--------------------------------------|
+|event.detail.id    |The `id` of the button that was clicked|
+|event.detail.button|The full button definition object      |
+|event.detail.editor|The `rt-native` element                |
+|event.bubbles      |true                                   |
+|event.composed     |true                                   |
 
 ---
 
@@ -467,112 +468,112 @@ rt-native {
 
 ### Toolbar Variables
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| --rtb-toolbar-bg | #FFF | Toolbar background color |
-| --rtb-toolbar-border-style | solid | Toolbar bottom border style |
-| --rtb-toolbar-border-width | 1px | Toolbar bottom border width |
-| --rtb-toolbar-border-color | #EEE | Toolbar bottom border color |
-| --rtb-toolbar-border-radius | 0px | Toolbar corner radius (container clips top corners automatically) |
-| --rtb-dropdown-bg | #FFF | Font / Size / Format dropdown background |
-| --rtb-dropdown-text | #000 | Dropdown item text color |
-| --rtb-dropdown-bg-hover | #e5e5e5 | Dropdown item hover background |
-| --rtb-dropdown-text-hover | #000 | Dropdown item hover text color |
+| Variable                  | Default | Description                                                     |
+|:--------------------------|:--------|:----------------------------------------------------------------|
+|--rtb-toolbar-bg           |#FFF     |Toolbar background color                                         |
+|--rtb-toolbar-border-style |solid    |Toolbar bottom border style                                      |
+|--rtb-toolbar-border-width |1px      |Toolbar bottom border width                                      |
+|--rtb-toolbar-border-color |#EEE     |Toolbar bottom border color                                      |
+|--rtb-toolbar-border-radius|0px      |Toolbar corner radius (container clips top corners automatically)|
+|--rtb-dropdown-bg          |#FFF     |Font / Size / Format dropdown background                         |
+|--rtb-dropdown-text        |#000     |Dropdown item text color                                         |
+|--rtb-dropdown-bg-hover    |#e5e5e5  |Dropdown item hover background                                   |
+|--rtb-dropdown-text-hover  |#000     |Dropdown item hover text color                                   |
 
 ---
 
 ### Button Variables
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| --rtb-btn-text | #000 | Button icon color |
-| --rtb-btn-size | 16px | Icon size (also drives button min-height and divider height) |
-| --rtb-btn-font | Arial, sans-serif | Font for dropdown buttons |
-| --rtb-btn-bg | inherit | Button background at rest |
-| --rtb-btn-bg-hover | #DDD | Button background on hover |
-| --rtb-btn-bg-selected | #CCC | Button background when active / selected |
-| --rtb-btn-border-style | none | Button border style |
-| --rtb-btn-border-width | 0px | Button border width |
-| --rtb-btn-border-color | #AAA | Button border color at rest |
-| --rtb-btn-border-hover | inherit | Button border color on hover |
-| --rtb-btn-border-selected | inherit | Button border color when selected |
-| --rtb-btn-border-radius | 5px | Button corner radius |
+| Variable                | Default         | Description                                                |
+|:------------------------|:----------------|:-----------------------------------------------------------|
+|--rtb-btn-text           |#000             |Button icon color                                           |
+|--rtb-btn-size           |16px             |Icon size (also drives button min-height and divider height)|
+|--rtb-btn-font           |Arial, sans-serif|Font for dropdown buttons                                   |
+|--rtb-btn-bg             |inherit          |Button background at rest                                   |
+|--rtb-btn-bg-hover       |#DDD             |Button background on hover                                  |
+|--rtb-btn-bg-selected    |#CCC             |Button background when active / selected                    |
+|--rtb-btn-border-style   |none             |Button border style                                         |
+|--rtb-btn-border-width   |0px              |Button border width                                         |
+|--rtb-btn-border-color   |#AAA             |Button border color at rest                                 |
+|--rtb-btn-border-hover   |inherit          |Button border color on hover                                |
+|--rtb-btn-border-selected|inherit          |Button border color when selected                           |
+|--rtb-btn-border-radius  |5px              |Button corner radius                                        |
 
 ---
 
 ### Content Area Variables
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| --rtb-content-text | #000 | Editor text color |
-| --rtb-content-size | 16px | Editor font size |
-| --rtb-content-font | Arial, sans-serif | Editor font family |
-| --rtb-content-bg | #FFF | Editor content background color |
-| --rtb-content-shadow | none | Inner box shadow on the content area |
-| --rtb-placeholder-color | #9ca3af | Placeholder text color |
+| Variable              | Default         | Description                        |
+|:----------------------|:----------------|:-----------------------------------|
+|--rtb-content-text     |#000             |Editor text color                   |
+|--rtb-content-size     |16px             |Editor font size                    |
+|--rtb-content-font     |Arial, sans-serif|Editor font family                  |
+|--rtb-content-bg       |#FFF             |Editor content background color     |
+|--rtb-content-shadow   |none             |Inner box shadow on the content area|
+|--rtb-placeholder-color|#9ca3af          |Placeholder text color              |
 
 ---
 
 ### Editor Container Variables
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| --rtb-editor-width | 100% | Maximum width of the editor |
-| --rtb-editor-height | 300px | Height of the editor |
-| --rtb-editor-border-style | solid | Outer border style |
-| --rtb-editor-border-width | 1px | Outer border width |
-| --rtb-editor-border-color | #EEE | Outer border color |
-| --rtb-editor-border-radius | 0px | Outer corner radius |
-| --rtb-editor-shadow | none | Outer box shadow |
-| --rtb-editor-resize | auto | auto shows the resize handle; hidden removes it |
-| --rtb-z-index | 1 | Z-index of the editor container — raise this to stack the editor above surrounding page content |
+| Variable                 | Default | Description                                                                                   |
+|:-------------------------|:--------|:----------------------------------------------------------------------------------------------|
+|--rtb-editor-width        |100%     |Maximum width of the editor                                                                    |
+|--rtb-editor-height       |300px    |Height of the editor                                                                           |
+|--rtb-editor-border-style |solid    |Outer border style                                                                             |
+|--rtb-editor-border-width |1px      |Outer border width                                                                             |
+|--rtb-editor-border-color |#EEE     |Outer border color                                                                             |
+|--rtb-editor-border-radius|0px      |Outer corner radius                                                                            |
+|--rtb-editor-shadow       |none     |Outer box shadow                                                                               |
+|--rtb-editor-resize       |auto     |auto shows the resize handle; hidden removes it                                                |
+|--rtb-z-index             |1        |Z-index of the editor container — raise this to stack the editor above surrounding page content|
 
 ---
 
 ### Scrollbar Variables
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| --rtb-scroll-width | 10px | Scrollbar track width |
-| --rtb-scroll-opacity | 1 | Scrollbar opacity |
-| --rtb-scroll-bg | transparent | Scrollbar track background |
-| --rtb-scroll-thumb-bg | #AAA | Scrollbar thumb color |
-| --rtb-scroll-thumb-bg-hover | #DDD | Scrollbar thumb color on hover |
-| --rtb-scroll-thumb-radius | 0 | Scrollbar thumb corner radius |
+| Variable                  | Default   | Description                  |
+|:--------------------------|:----------|:-----------------------------|
+|--rtb-scroll-width         |10px       |Scrollbar track width         |
+|--rtb-scroll-opacity       |1          |Scrollbar opacity             |
+|--rtb-scroll-bg            |transparent|Scrollbar track background    |
+|--rtb-scroll-thumb-bg      |#AAA       |Scrollbar thumb color         |
+|--rtb-scroll-thumb-bg-hover|#DDD       |Scrollbar thumb color on hover|
+|--rtb-scroll-thumb-radius  |0          |Scrollbar thumb corner radius |
 
 ---
 
 ### Blockquote Variables
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| --rtb-quote-bg | #f9f9f9 | Blockquote background color |
-| --rtb-quote-border-color | #ccc | Blockquote left-border color |
-| --rtb-quote-border-width | 5px | Blockquote left-border width |
+| Variable               | Default | Description                |
+|:-----------------------|:--------|:---------------------------|
+|--rtb-quote-bg          |#f9f9f9  |Blockquote background color |
+|--rtb-quote-border-color|#ccc     |Blockquote left-border color|
+|--rtb-quote-border-width|5px      |Blockquote left-border width|
 
 ---
 
 ### Code / Pre Variables
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| --rtb-code-bg | #f9f9f9 | Code block background color |
-| --rtb-code-border-radius | 10px | Code block corner radius |
+| Variable               | Default | Description               |
+|:-----------------------|:--------|:--------------------------|
+|--rtb-code-bg           |#f9f9f9  |Code block background color|
+|--rtb-code-border-radius|10px     |Code block corner radius   |
 
 ---
 
 ### Modal / Dialog Variables
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| --rtb-modal-bg | #fefefe | Dialog background color |
-| --rtb-modal-text | #000 | Dialog text and close-button color |
-| --rtb-modal-text-size | 16px | Dialog font size |
-| --rtb-modal-text-font | Arial, sans-serif | Dialog font family |
-| --rtb-modal-input-bg | #fff | Input field background |
-| --rtb-modal-input-text | #000 | Input field text color |
-| --rtb-modal-input-border | #CCC | Input field border color |
-| --rtb-modal-checkbox | #007bff | Checkbox accent color |
+| Variable               | Default         | Description                      |
+|:-----------------------|:----------------|:---------------------------------|
+|--rtb-modal-bg          |#fefefe          |Dialog background color           |
+|--rtb-modal-text        |#000             |Dialog text and close-button color|
+|--rtb-modal-text-size   |16px             |Dialog font size                  |
+|--rtb-modal-text-font   |Arial, sans-serif|Dialog font family                |
+|--rtb-modal-input-bg    |#fff             |Input field background            |
+|--rtb-modal-input-text  |#000             |Input field text color            |
+|--rtb-modal-input-border|#CCC             |Input field border color          |
+|--rtb-modal-checkbox    |#007bff          |Checkbox accent color             |
 
 ---
 
@@ -796,49 +797,49 @@ editor.setPreviewCssFiles('my-content.css');
 
 Buttons appear left-to-right in the order listed. Dividers separate logical groups.
 
-| Button | Action | Shortcut |
-| --- | --- | --- |
-| Font | Set font family | — |
-| Size | Set font size | Ctrl+Shift+< / Ctrl+Shift+> |
-| Format | Apply block format (paragraph, headings 1–6) | Ctrl+Shift+D / Ctrl+Shift+1–6 |
-| Bold | Bold | Ctrl+B |
-| Italic | Italic | Ctrl+I |
-| Underline | Underline | Ctrl+U |
-| Strikethrough | Strikethrough | Ctrl+D |
-| Subscript | Subscript | Ctrl+= |
-| Superscript | Superscript | Ctrl+Shift++ |
-| Text Color | Open text color picker | Ctrl+Shift+C |
-| Background Color | Open text background color picker | Ctrl+Shift+B |
-| Remove Color | Strip text and background color | — |
-| Align Left | Left-align | Ctrl+L |
-| Align Center | Center-align | Ctrl+E |
-| Align Right | Right-align | Ctrl+R |
-| Justify | Justify | Ctrl+J |
-| Cut | Cut selection | Ctrl+X |
-| Copy | Copy selection | Ctrl+C |
-| Paste | Paste from clipboard | Ctrl+V |
-| Delete | Delete selection | Delete |
-| Select All | Select all content | Ctrl+A |
-| Ordered List | Insert numbered list | Ctrl+Shift+O |
-| Unordered List | Insert bulleted list | Ctrl+Shift+U |
-| Increase Indent | Indent / promote list item | Tab |
-| Decrease Indent | Outdent / demote list item | Shift+Tab |
-| Insert Link | Open link dialog | Ctrl+Shift+K |
-| Remove Link | Remove hyperlink | — |
-| Insert Image | Open image URL dialog | Ctrl+Shift+I |
-| Upload Image | Open image upload / embed dialog | Ctrl+Shift+& |
-| Block Quote | Open block quote dialog | Ctrl+Shift+Q |
-| Embed Media | Open media embed dialog (audio, PDF, iframe) | Ctrl+Shift+M |
-| Video | Open video embed dialog | Ctrl+Shift+V |
-| Insert Table | Open table dialog | Ctrl+Shift+L |
-| Code Block | Open code block dialog | Ctrl+Shift+\* |
-| Horizontal Rule | Insert \\<hr> at cursor position | Ctrl+Shift+H |
-| Undo | Undo last action | Ctrl+Z |
-| Redo | Redo last action | Ctrl+Y |
-| Toggle Status Bar | Show / hide the word and character count bar | Ctrl+\\ |
-| Save HTML | Download editor content as an .html file | Ctrl+Shift+S |
-| HTML Source | Toggle raw HTML source view | Ctrl+Shift+A |
-| Preview | Open preview dialog | Ctrl+Shift+P |
+| Button          | Action                                     | Shortcut                    |
+|:----------------|:-------------------------------------------|:----------------------------|
+|Font             |Set font family                             |—                            |
+|Size             |Set font size                               |Ctrl+Shift+< / Ctrl+Shift+>  |
+|Format           |Apply block format (paragraph, headings 1–6)|Ctrl+Shift+D / Ctrl+Shift+1–6|
+|Bold             |Bold                                        |Ctrl+B                       |
+|Italic           |Italic                                      |Ctrl+I                       |
+|Underline        |Underline                                   |Ctrl+U                       |
+|Strikethrough    |Strikethrough                               |Ctrl+D                       |
+|Subscript        |Subscript                                   |Ctrl+=                       |
+|Superscript      |Superscript                                 |Ctrl+Shift++                 |
+|Text Color       |Open text color picker                      |Ctrl+Shift+C                 |
+|Background Color |Open text background color picker           |Ctrl+Shift+B                 |
+|Remove Color     |Strip text and background color             |—                            |
+|Align Left       |Left-align                                  |Ctrl+L                       |
+|Align Center     |Center-align                                |Ctrl+E                       |
+|Align Right      |Right-align                                 |Ctrl+R                       |
+|Justify          |Justify                                     |Ctrl+J                       |
+|Cut              |Cut selection                               |Ctrl+X                       |
+|Copy             |Copy selection                              |Ctrl+C                       |
+|Paste            |Paste from clipboard                        |Ctrl+V                       |
+|Delete           |Delete selection                            |Delete                       |
+|Select All       |Select all content                          |Ctrl+A                       |
+|Ordered List     |Insert numbered list                        |Ctrl+Shift+O                 |
+|Unordered List   |Insert bulleted list                        |Ctrl+Shift+U                 |
+|Increase Indent  |Indent / promote list item                  |Tab                          |
+|Decrease Indent  |Outdent / demote list item                  |Shift+Tab                    |
+|Insert Link      |Open link dialog                            |Ctrl+Shift+K                 |
+|Remove Link      |Remove hyperlink                            |—                            |
+|Insert Image     |Open image URL dialog                       |Ctrl+Shift+I                 |
+|Upload Image     |Open image upload / embed dialog            |Ctrl+Shift+&                 |
+|Block Quote      |Open block quote dialog                     |Ctrl+Shift+Q                 |
+|Embed Media      |Open media embed dialog (audio, PDF, iframe)|Ctrl+Shift+M                 |
+|Video            |Open video embed dialog                     |Ctrl+Shift+V                 |
+|Insert Table     |Open table dialog                           |Ctrl+Shift+L                 |
+|Code Block       |Open code block dialog                      |Ctrl+Shift+\*                |
+|Horizontal Rule  |Insert \\<hr> at cursor position            |Ctrl+Shift+H                 |
+|Undo             |Undo last action                            |Ctrl+Z                       |
+|Redo             |Redo last action                            |Ctrl+Y                       |
+|Toggle Status Bar|Show / hide the word and character count bar|Ctrl+\\                      |
+|Save HTML        |Download editor content as an .html file    |Ctrl+Shift+S                 |
+|HTML Source      |Toggle raw HTML source view                 |Ctrl+Shift+A                 |
+|Preview          |Open preview dialog                         |Ctrl+Shift+P                 |
 
 ---
 
@@ -846,47 +847,47 @@ Buttons appear left-to-right in the order listed. Dividers separate logical grou
 
 All shortcuts are active when the editor content area has focus. The Ctrl+\\ and Ctrl+Shift+A/P/S shortcuts also work when the HTML source textarea has focus.
 
-| Category | Action | Shortcut |
-| --- | --- | --- |
-| **Formatting** | Bold | Ctrl+B |
-|  | Italic | Ctrl+I |
-|  | Underline | Ctrl+U |
-|  | Strikethrough | Ctrl+D |
-|  | Subscript | Ctrl+= |
-|  | Superscript | Ctrl+Shift++ |
-| **Color** | Text color | Ctrl+Shift+C |
-|  | Text background color | Ctrl+Shift+B |
-| **Alignment** | Align left | Ctrl+L |
-|  | Align center | Ctrl+E |
-|  | Align right | Ctrl+R |
-|  | Justify | Ctrl+J |
-| **Editing** | Cut | Ctrl+X |
-|  | Copy | Ctrl+C |
-|  | Paste | Ctrl+V |
-|  | Select all | Ctrl+A |
-|  | Undo | Ctrl+Z |
-|  | Redo | Ctrl+Y |
-| **Lists** | Ordered list | Ctrl+Shift+O |
-|  | Unordered list | Ctrl+Shift+U |
-|  | Increase indent | Tab |
-|  | Decrease indent | Shift+Tab |
-| **Insert** | Insert link | Ctrl+Shift+K |
-|  | Insert image | Ctrl+Shift+I |
-|  | Upload image | Ctrl+Shift+& |
-|  | Block quote | Ctrl+Shift+Q |
-|  | Video | Ctrl+Shift+V |
-|  | Embed media | Ctrl+Shift+M |
-|  | Insert table | Ctrl+Shift+L |
-|  | Code block | Ctrl+Shift+\* |
-|  | Horizontal rule | Ctrl+Shift+H |
-| **Format** | Paragraph | Ctrl+Shift+D |
-|  | Heading 1–6 | Ctrl+Shift+1 – Ctrl+Shift+6 |
-|  | Increase font size | Ctrl+Shift+> |
-|  | Decrease font size | Ctrl+Shift+< |
-| **View** | Toggle status bar | Ctrl+\\ |
-|  | Toggle HTML source | Ctrl+Shift+A |
-|  | Preview | Ctrl+Shift+P |
-|  | Save HTML | Ctrl+Shift+S |
+| Category     | Action              | Shortcut                  |
+|:-------------|:--------------------|:--------------------------|
+|**Formatting**|Bold                 |Ctrl+B                     |
+|              |Italic               |Ctrl+I                     |
+|              |Underline            |Ctrl+U                     |
+|              |Strikethrough        |Ctrl+D                     |
+|              |Subscript            |Ctrl+=                     |
+|              |Superscript          |Ctrl+Shift++               |
+|**Color**     |Text color           |Ctrl+Shift+C               |
+|              |Text background color|Ctrl+Shift+B               |
+|**Alignment** |Align left           |Ctrl+L                     |
+|              |Align center         |Ctrl+E                     |
+|              |Align right          |Ctrl+R                     |
+|              |Justify              |Ctrl+J                     |
+|**Editing**   |Cut                  |Ctrl+X                     |
+|              |Copy                 |Ctrl+C                     |
+|              |Paste                |Ctrl+V                     |
+|              |Select all           |Ctrl+A                     |
+|              |Undo                 |Ctrl+Z                     |
+|              |Redo                 |Ctrl+Y                     |
+|**Lists**     |Ordered list         |Ctrl+Shift+O               |
+|              |Unordered list       |Ctrl+Shift+U               |
+|              |Increase indent      |Tab                        |
+|              |Decrease indent      |Shift+Tab                  |
+|**Insert**    |Insert link          |Ctrl+Shift+K               |
+|              |Insert image         |Ctrl+Shift+I               |
+|              |Upload image         |Ctrl+Shift+&               |
+|              |Block quote          |Ctrl+Shift+Q               |
+|              |Video                |Ctrl+Shift+V               |
+|              |Embed media          |Ctrl+Shift+M               |
+|              |Insert table         |Ctrl+Shift+L               |
+|              |Code block           |Ctrl+Shift+\*              |
+|              |Horizontal rule      |Ctrl+Shift+H               |
+|**Format**    |Paragraph            |Ctrl+Shift+D               |
+|              |Heading 1–6          |Ctrl+Shift+1 – Ctrl+Shift+6|
+|              |Increase font size   |Ctrl+Shift+>               |
+|              |Decrease font size   |Ctrl+Shift+<               |
+|**View**      |Toggle status bar    |Ctrl+\\                    |
+|              |Toggle HTML source   |Ctrl+Shift+A               |
+|              |Preview              |Ctrl+Shift+P               |
+|              |Save HTML            |Ctrl+Shift+S               |
 
 ---
 
