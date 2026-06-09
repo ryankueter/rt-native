@@ -113,11 +113,6 @@ npm install rt-native
 
         // Write content
         editor.setValue('<p>Hello <strong>world</strong></p>');
-
-        // React to changes
-        editor.addEventListener('change', e => {
-            console.log(e.detail.value);
-        });
     </script>
 </body>
 </html>
@@ -216,7 +211,7 @@ editor.configure({
         quote: true, codeBlock: true, embedMedia: true,
         table: true, horizontalRule: true, mediaDivider: true,
         undo: true, redo: true, historyDivider: true,
-        saveHtml: true, htmlView: true, preview: true, statusBarToggle: true,
+        saveHtml: true, htmlView: true, preview: true, fullscreen: true, statusBarToggle: true,
         wordCount: true,
     }
 });
@@ -273,6 +268,7 @@ editor.configure({
 |saveHtml         |Save HTML file button                                  |
 |htmlView         |Toggle HTML source view button                         |
 |preview          |Preview button                                         |
+|fullscreen       |Maximize / restore editor button                       |
 |wordCount        |Status bar (word / character count) — hidden by default|
 
 > **Divider auto-hiding:** Dividers are only rendered when at least one button in their group is visible *and* the divider's own key is true.
@@ -310,9 +306,6 @@ editor.setPreviewCssFiles('/styles/content.css', '/styles/tables.css');
 
 // Load a single file
 editor.setPreviewCssFiles('/styles/my-content.css');
-
-// Clear all preview files
-editor.setPreviewCssFiles();
 ```
 
 > **CORS:** Files are loaded with fetch(). They must be served from the same origin or include appropriate Access-Control-Allow-Origin headers.
@@ -340,9 +333,6 @@ editor.setPreviewCss(`
         background: #f8f6ff;
     }
 `);
-
-// Clear
-editor.setPreviewCss('');
 ```
 
 **setPreviewCss()** and **setPreviewCssFiles()** are independent — both can be active at the same time. File rules are applied first; inline rules are appended after, so inline CSS always wins when there is a conflict.
@@ -790,56 +780,6 @@ When you load preview CSS with **setPreviewCssFiles()** or **setPreviewCss()**, 
 ```js
 editor.setPreviewCssFiles('my-content.css');
 ```
-
----
-
-## Toolbar Buttons
-
-Buttons appear left-to-right in the order listed. Dividers separate logical groups.
-
-| Button          | Action                                     | Shortcut                    |
-|:----------------|:-------------------------------------------|:----------------------------|
-|Font             |Set font family                             |—                            |
-|Size             |Set font size                               |Ctrl+Shift+< / Ctrl+Shift+>  |
-|Format           |Apply block format (paragraph, headings 1–6)|Ctrl+Shift+D / Ctrl+Shift+1–6|
-|Bold             |Bold                                        |Ctrl+B                       |
-|Italic           |Italic                                      |Ctrl+I                       |
-|Underline        |Underline                                   |Ctrl+U                       |
-|Strikethrough    |Strikethrough                               |Ctrl+D                       |
-|Subscript        |Subscript                                   |Ctrl+=                       |
-|Superscript      |Superscript                                 |Ctrl+Shift++                 |
-|Text Color       |Open text color picker                      |Ctrl+Shift+C                 |
-|Background Color |Open text background color picker           |Ctrl+Shift+B                 |
-|Remove Color     |Strip text and background color             |—                            |
-|Align Left       |Left-align                                  |Ctrl+L                       |
-|Align Center     |Center-align                                |Ctrl+E                       |
-|Align Right      |Right-align                                 |Ctrl+R                       |
-|Justify          |Justify                                     |Ctrl+J                       |
-|Cut              |Cut selection                               |Ctrl+X                       |
-|Copy             |Copy selection                              |Ctrl+C                       |
-|Paste            |Paste from clipboard                        |Ctrl+V                       |
-|Delete           |Delete selection                            |Delete                       |
-|Select All       |Select all content                          |Ctrl+A                       |
-|Ordered List     |Insert numbered list                        |Ctrl+Shift+O                 |
-|Unordered List   |Insert bulleted list                        |Ctrl+Shift+U                 |
-|Increase Indent  |Indent / promote list item                  |Tab                          |
-|Decrease Indent  |Outdent / demote list item                  |Shift+Tab                    |
-|Insert Link      |Open link dialog                            |Ctrl+Shift+K                 |
-|Remove Link      |Remove hyperlink                            |—                            |
-|Insert Image     |Open image URL dialog                       |Ctrl+Shift+I                 |
-|Upload Image     |Open image upload / embed dialog            |Ctrl+Shift+&                 |
-|Block Quote      |Open block quote dialog                     |Ctrl+Shift+Q                 |
-|Embed Media      |Open media embed dialog (audio, PDF, iframe)|Ctrl+Shift+M                 |
-|Video            |Open video embed dialog                     |Ctrl+Shift+V                 |
-|Insert Table     |Open table dialog                           |Ctrl+Shift+L                 |
-|Code Block       |Open code block dialog                      |Ctrl+Shift+\*                |
-|Horizontal Rule  |Insert \\<hr> at cursor position            |Ctrl+Shift+H                 |
-|Undo             |Undo last action                            |Ctrl+Z                       |
-|Redo             |Redo last action                            |Ctrl+Y                       |
-|Toggle Status Bar|Show / hide the word and character count bar|Ctrl+\\                      |
-|Save HTML        |Download editor content as an .html file    |Ctrl+Shift+S                 |
-|HTML Source      |Toggle raw HTML source view                 |Ctrl+Shift+A                 |
-|Preview          |Open preview dialog                         |Ctrl+Shift+P                 |
 
 ---
 
