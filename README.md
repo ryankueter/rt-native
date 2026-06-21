@@ -12,6 +12,7 @@
 2. [Installation](#installation)
 3. [Quick Start](#quick-start)
 4. [HTML Attributes](#html-attributes)
+   - [Example](#example)
 5. [JavaScript API](#javascript-api)
    - [getValue()](#getvalue)
    - [getPlainText()](#getplaintext)
@@ -21,27 +22,30 @@
    - [setPreviewCssFiles()](#setpreviewcssfiles)
    - [setPreviewCssFile()](#setpreviewcssfile)
    - [setPreviewCss()](#setpreviewcss)
+   - [At-rules](#at-rules)
    - [addCustomButton()](#addcustombutton)
    - [setCustomButtons()](#setcustombuttons)
    - [removeCustomButton()](#removecustombutton)
    - [clearCustomButtons()](#clearcustombuttons)
 6. [Events](#events)
+   - [change](#change)
+   - [custom-button-click](#custom-button-click)
 7. [CSS Variables](#css-variables)
-   - [Toolbar](#toolbar-variables)
-   - [Buttons](#button-variables)
-   - [Content Area](#content-area-variables)
-   - [Editor Container](#editor-container-variables)
-   - [Scrollbars](#scrollbar-variables)
-   - [Blockquote](#blockquote-variables)
-   - [Code / Pre](#code--pre-variables)
-   - [Modals & Dialogs](#modal--dialog-variables)
+   - [Toolbar Variables](#toolbar-variables)
+   - [Button Variables](#button-variables)
+   - [Content Area Variables](#content-area-variables)
+   - [Editor Container Variables](#editor-container-variables)
+   - [Scrollbar Variables](#scrollbar-variables)
+   - [Blockquote Variables](#blockquote-variables)
+   - [Code / Pre Variables](#code--pre-variables)
+   - [Modal / Dialog Variables](#modal--dialog-variables)
 8. [Theming with CSS Classes](#theming-with-css-classes)
+   - [Fluent 2 Themes](#fluent-2-themes)
 9. [Preview Window Styling](#preview-window-styling)
-10. [Toolbar Buttons](#toolbar-buttons)
-11. [Keyboard Shortcuts](#keyboard-shortcuts)
-12. [Accessibility](#accessibility)
-13. [Multiple Instances](#multiple-instances)
-14. [Browser Support](#browser-support)
+10. [Keyboard Shortcuts](#keyboard-shortcuts)
+11. [Accessibility](#accessibility)
+12. [Multiple Instances](#multiple-instances)
+13. [Browser Support](#browser-support)
 
 ---
 
@@ -813,7 +817,7 @@ All shortcuts are active when the editor content area has focus. The Ctrl+\\ and
 |              |Decrease indent      |Shift+Tab                  |
 |**Insert**    |Insert link          |Ctrl+Shift+K               |
 |              |Insert image         |Ctrl+Shift+I               |
-|              |Upload image         |Ctrl+Shift+&               |
+|              |Upload image         |Ctrl+Shift+&amp;           |
 |              |Block quote          |Ctrl+Shift+Q               |
 |              |Video                |Ctrl+Shift+V               |
 |              |Embed media          |Ctrl+Shift+M               |
