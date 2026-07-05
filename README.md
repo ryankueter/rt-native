@@ -212,7 +212,7 @@ editor.configure({
         selectAll: true, actionDivider: true,
         orderedList: true, unorderedList: true, indent: true, listDivider: true,
         link: true, image: true, imageUpload: true,
-        quote: true, codeBlock: true, embedMedia: true,
+        quote: true, codeBlock: true, embedMedia: true, video: true, audio: true,
         table: true, horizontalRule: true, mediaDivider: true,
         undo: true, redo: true, historyDivider: true,
         saveHtml: true, htmlView: true, preview: true, fullscreen: true, statusBarToggle: true,
@@ -262,6 +262,7 @@ editor.configure({
 |codeBlock        |Code block button                                      |
 |embedMedia       |Embed media (audio / PDF / iframe) button              |
 |video            |Video embed button                                     |
+|audio            |Audio embed button                                     |
 |table            |Insert table button                                    |
 |horizontalRule   |Insert horizontal rule button                          |
 |mediaDivider     |Divider after insert buttons                           |
@@ -276,6 +277,8 @@ editor.configure({
 |wordCount        |Status bar (word / character count) — hidden by default|
 
 > **Divider auto-hiding:** Dividers are only rendered when at least one button in their group is visible *and* the divider's own key is true.
+
+The **Audio** toolbar button opens an Audio dialog that inserts `<audio>` elements with one primary source, an optional fallback source, dynamically generated source MIME types, and the browser fallback text `Your browser does not support the audio element.` Hide it with `visibility.audio = false`.
 
 ### setReadOnly()
 
@@ -341,9 +344,7 @@ editor.setPreviewCss(`
 
 **setPreviewCss()** and **setPreviewCssFiles()** are independent — both can be active at the same time. File rules are applied first; inline rules are appended after, so inline CSS always wins when there is a conflict.
 
-### At-rules
-
-@media, @supports, @layer, and @container blocks are handled correctly — selectors inside them are scoped. Other at-rules (@keyframes, @font-face, etc.) are passed through unchanged.
+###
 
 ### addCustomButton()
 
@@ -820,6 +821,7 @@ All shortcuts are active when the editor content area has focus. The Ctrl+\\ and
 |              |Upload image         |Ctrl+Shift+&amp;           |
 |              |Block quote          |Ctrl+Shift+Q               |
 |              |Video                |Ctrl+Shift+V               |
+|              |Audio                |Ctrl+Shift+S               |
 |              |Embed media          |Ctrl+Shift+M               |
 |              |Insert table         |Ctrl+Shift+L               |
 |              |Code block           |Ctrl+Shift+\*              |
