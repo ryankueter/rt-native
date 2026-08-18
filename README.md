@@ -27,10 +27,17 @@
    - [setCustomButtons()](#setcustombuttons)
    - [removeCustomButton()](#removecustombutton)
    - [clearCustomButtons()](#clearcustombuttons)
-6. [Events](#events)
+6. [Spellchecking](#spellchecking)
+   - [Enabling / Disabling Spellcheck](#enabling--disabling-spellcheck)
+   - [Adding Hunspell](#adding-hunspell)
+   - [setSpellChecker()](#setspellchecker)
+   - [getSpellChecker()](#getspellchecker)
+   - [setSpellCheckEnabled()](#setspellcheckenabled)
+   - [Writing a Custom Spellchecker](#writing-a-custom-spellchecker)
+7. [Events](#events)
    - [change](#change)
    - [custom-button-click](#custom-button-click)
-7. [CSS Variables](#css-variables)
+8. [CSS Variables](#css-variables)
    - [Toolbar Variables](#toolbar-variables)
    - [Button Variables](#button-variables)
    - [Content Area Variables](#content-area-variables)
@@ -39,13 +46,13 @@
    - [Blockquote Variables](#blockquote-variables)
    - [Code / Pre Variables](#code--pre-variables)
    - [Modal / Dialog Variables](#modal--dialog-variables)
-8. [Theming with CSS Classes](#theming-with-css-classes)
+9. [Theming with CSS Classes](#theming-with-css-classes)
    - [Fluent 2 Themes](#fluent-2-themes)
-9. [Preview Window Styling](#preview-window-styling)
-10. [Keyboard Shortcuts](#keyboard-shortcuts)
-11. [Accessibility](#accessibility)
-12. [Multiple Instances](#multiple-instances)
-13. [Browser Support](#browser-support)
+10. [Preview Window Styling](#preview-window-styling)
+11. [Keyboard Shortcuts](#keyboard-shortcuts)
+12. [Accessibility](#accessibility)
+13. [Multiple Instances](#multiple-instances)
+14. [Browser Support](#browser-support)
 
 ---
 
@@ -400,6 +407,378 @@ editor.clearCustomButtons();
 
 ---
 
+## Spellchecking
+
+rt-native ships **no spellchecker of its own**. Instead it exposes a small pluggable interface — call `setSpellChecker()` with any object that can check and suggest words, and the editor takes care of the rest:
+
+- Misspelled words are underlined with a wavy squiggle using the [CSS Custom Highlight API](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Custom_Highlight_API) (no DOM mutation, so your HTML output is never touched).
+- Right-clicking a misspelled word adds a **Spelling** section to the context menu, with a dropdown of suggested corrections plus **Ignore Word** and **Add to Dictionary** actions.
+- Everything works fully offline once a spellchecker (such as Hunspell, below) is loaded.
+
+### Enabling / Disabling Spellcheck
+
+Spellcheck marking only runs once a spellchecker has been supplied via `setSpellChecker()` (see below). The `spellCheckEnabled` option turns the marking on or off without discarding the configured spellchecker:
+
+```js
+// Declaratively, via configure()
+editor.configure({ spellCheckEnabled: false });
+
+// Or imperatively
+editor.setSpellCheckEnabled(false); // turn off
+editor.setSpellCheckEnabled(true);  // turn back on
+```
+
+It defaults to `true`, so once a spellchecker is configured, checking starts immediately.
+
+### Adding Hunspell
+
+The real [Hunspell](https://github.com/hunspell/hunspell) engine, compiled to WebAssembly, is available on the [hunspell-asm](https://www.npmjs.com/package/hunspell-asm) npm package, served via the [jsDelivr](https://www.jsdelivr.com/) CDN — no download, npm install, or bundler required. Pair it with a CDN-hosted dictionary such as [hunspell-dict-en-us](https://www.npmjs.com/package/hunspell-dict-en-us) and a small adapter that wires Hunspell into rt-native's `setSpellChecker()` interface.
+
+Add the WASM engine as a plain `<script>` tag (defines `window.Module`), **before** rt-native itself:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/hunspell-asm@4.0.2/dist/cjs/lib/browser/hunspell.js"></script>
+<script src="rt-native.js"></script>
+```
+
+Then add the loader and the rt-native adapter. Both are small, dependency-free, and safe to paste directly into your page — no separate files to host:
+
+```html
+<script>
+/**
+ * Dependency-free browser loader for the Hunspell WASM engine loaded above.
+ * A no-bundler port of the loading logic used by the "hunspell-asm" npm
+ * package (MIT licensed), with its two small dependencies
+ * ("emscripten-wasm-loader" and "nanoid") inlined.
+ */
+(function (global) {
+    'use strict';
+
+    const randomId = (length) => {
+        const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let out = '';
+        for (let i = 0; i < length; i++) out += chars[Math.floor(Math.random() * chars.length)];
+        return out;
+    };
+
+    const isMounted = (FS, path, type) => {
+        try {
+            const stat = FS.stat(path);
+            const check = type === 'dir' ? FS.isDir : FS.isFile;
+            return !!stat && check(stat.mode);
+        } catch (_) {
+            return false;
+        }
+    };
+
+    /* Builds the overrides object passed into the Emscripten MODULARIZE
+       factory function, exposing an awaitable initializeRuntime() that
+       resolves once Module["onRuntimeInitialized"] fires. */
+    const constructModule = () => {
+        const ret = { __asmModuleInitialized__: false, onRuntimeInitialized: null };
+        ret.initializeRuntime = (timeout) => {
+            if (ret.__asmModuleInitialized__) return Promise.resolve(true);
+            return new Promise((resolve) => {
+                const timeoutId = timeout ? setTimeout(() => resolve(false), timeout) : null;
+                ret.onAbort = (reason) => {
+                    if (!ret.__asmModuleInitialized__) {
+                        if (timeoutId) clearTimeout(timeoutId);
+                        throw reason instanceof Error ? reason : new Error(reason);
+                    }
+                };
+                ret.onRuntimeInitialized = () => {
+                    if (timeoutId) clearTimeout(timeoutId);
+                    ret.__asmModuleInitialized__ = true;
+                    resolve(true);
+                };
+            });
+        };
+        return ret;
+    };
+
+    /* Hunspell's C API, wrapped via Emscripten's cwrap. Signatures mirror
+       hunspell/src/hunspell/hunspell.hxx's extern "C" wrapper functions. */
+    const wrapHunspellInterface = (cwrap) => ({
+        create: cwrap('Hunspell_create', 'number', ['number', 'number']),
+        destroy: cwrap('Hunspell_destroy', null, ['number']),
+        spell: cwrap('Hunspell_spell', 'number', ['number', 'number']),
+        suggest: cwrap('Hunspell_suggest', 'number', ['number', 'number', 'number']),
+        free_list: cwrap('Hunspell_free_list', null, ['number', 'number', 'number']),
+        add_dic: cwrap('Hunspell_add_dic', 'number', ['number', 'number']),
+        add: cwrap('Hunspell_add', 'number', ['number', 'number']),
+        add_with_affix: cwrap('Hunspell_add_with_affix', 'number', ['number', 'number', 'number']),
+        remove: cwrap('Hunspell_remove', 'number', ['number', 'number'])
+    });
+
+    const hunspellLoader = (asmModule) => {
+        const { cwrap, FS, _free, allocateUTF8, _malloc, getValue, UTF8ToString } = asmModule;
+        const hunspellInterface = wrapHunspellInterface(cwrap);
+        const memPathId = `/${randomId(24)}`;
+        FS.mkdir(memPathId);
+
+        const usingParamPtr = (...args) => {
+            const params = [...args];
+            const fn = params.pop();
+            const paramsPtr = params.map((param) => allocateUTF8(param.normalize()));
+            const ret = fn(...paramsPtr);
+            paramsPtr.forEach((ptr) => _free(ptr));
+            return ret;
+        };
+
+        return {
+            mountBuffer: (contents, fileName) => {
+                const file = fileName || randomId(24);
+                const mountedFilePath = `${memPathId}/${file}`;
+                if (!isMounted(FS, mountedFilePath, 'file')) {
+                    FS.writeFile(mountedFilePath, contents, { encoding: 'binary' });
+                }
+                return mountedFilePath;
+            },
+            unmount: (mountedPath) => {
+                if (isMounted(FS, mountedPath, 'file') && mountedPath.indexOf(memPathId) > -1) {
+                    FS.unlink(mountedPath);
+                    return;
+                }
+                if (isMounted(FS, mountedPath, 'dir')) {
+                    FS.unmount(mountedPath);
+                    FS.rmdir(mountedPath);
+                }
+            },
+            create: (affPath, dictPath) => {
+                const affPathPtr = allocateUTF8(affPath);
+                const dictPathPtr = allocateUTF8(dictPath);
+                const hunspellPtr = hunspellInterface.create(affPathPtr, dictPathPtr);
+                return {
+                    dispose: () => {
+                        hunspellInterface.destroy(hunspellPtr);
+                        _free(affPathPtr);
+                        _free(dictPathPtr);
+                    },
+                    spell: (word) => !!usingParamPtr(word, (wordPtr) => hunspellInterface.spell(hunspellPtr, wordPtr)),
+                    suggest: (word) => {
+                        const suggestionListPtr = _malloc(4);
+                        const suggestionCount = usingParamPtr(word, (wordPtr) =>
+                            hunspellInterface.suggest(hunspellPtr, suggestionListPtr, wordPtr));
+                        const suggestionListValuePtr = getValue(suggestionListPtr, '*');
+                        const ret = suggestionCount > 0
+                            ? Array.from(Array(suggestionCount).keys()).map((idx) =>
+                                UTF8ToString(getValue(suggestionListValuePtr + idx * 4, '*')))
+                            : [];
+                        hunspellInterface.free_list(hunspellPtr, suggestionListPtr, suggestionCount);
+                        _free(suggestionListPtr);
+                        return ret;
+                    },
+                    addDictionary: (dictPath) => usingParamPtr(dictPath, (dictPathPtr) =>
+                        hunspellInterface.add_dic(hunspellPtr, dictPathPtr)) !== 1,
+                    addWord: (word) => usingParamPtr(word, (wordPtr) => hunspellInterface.add(hunspellPtr, wordPtr)),
+                    addWordWithAffix: (word, affix) => usingParamPtr(word, affix, (wordPtr, affixPtr) =>
+                        hunspellInterface.add_with_affix(hunspellPtr, wordPtr, affixPtr)),
+                    removeWord: (word) => usingParamPtr(word, (wordPtr) => hunspellInterface.remove(hunspellPtr, wordPtr))
+                };
+            }
+        };
+    };
+
+    const loadModule = async (initOptions) => {
+        const timeout = (initOptions && initOptions.timeout) || 20000;
+        if (typeof global.Module !== 'function') {
+            throw new Error(
+                'HunspellAsm.loadModule: window.Module was not found. ' +
+                'Include the hunspell-asm <script> tag before this one.'
+            );
+        }
+        const constructedModule = constructModule();
+        const asmModule = global.Module(constructedModule);
+        const result = await asmModule.initializeRuntime(timeout);
+        if (!result) {
+            throw new Error('HunspellAsm.loadModule: timed out initializing the WebAssembly runtime.');
+        }
+        return hunspellLoader(asmModule);
+    };
+
+    global.HunspellAsm = { loadModule };
+})(typeof window !== 'undefined' ? window : this);
+</script>
+
+<script>
+/**
+ * The real Hunspell spellchecker (https://github.com/hunspell/hunspell),
+ * compiled to WebAssembly and running in the browser, wired up as an
+ * rt-native spellchecker adapter:
+ *
+ *   checkWord(word) => Promise<boolean>
+ *   suggest(word)   => Promise<string[]>
+ *   addWord(word)   => void
+ *   ignoreWord(word)=> void
+ *
+ * Loading the WASM engine is asynchronous, so every method waits on an
+ * internal "ready" promise before touching the Hunspell instance - callers
+ * can configure the checker immediately via rt-native's setSpellChecker()
+ * without waiting for it to finish loading.
+ */
+(function (global) {
+    'use strict';
+
+    /* The WASM runtime itself is shared across instances - it's the slow
+       part to load (~1s) and holds no dictionary-specific state. */
+    let sharedFactoryPromise = null;
+    const getFactory = () => {
+        if (!sharedFactoryPromise) {
+            if (!global.HunspellAsm || typeof global.HunspellAsm.loadModule !== 'function') {
+                return Promise.reject(new Error(
+                    'HunspellSpellChecker: window.HunspellAsm was not found. ' +
+                    'Include the hunspell-asm <script> tag and the loader script above before this one.'
+                ));
+            }
+            sharedFactoryPromise = global.HunspellAsm.loadModule();
+        }
+        return sharedFactoryPromise;
+    };
+
+    class HunspellSpellChecker {
+        /**
+         * @param {object} [options]
+         * @param {{ aff: string, dic: string }} [options.dictionary] - Defaults to
+         *   window.HunspellDictionaries.en_US, fetched from a CDN dictionary
+         *   package such as hunspell-dict-en-us (see the setup below).
+         */
+        constructor(options = {}) {
+            const dictionary = options.dictionary
+                || (global.HunspellDictionaries && global.HunspellDictionaries.en_US);
+            if (!dictionary || !dictionary.aff || !dictionary.dic) {
+                throw new Error(
+                    'HunspellSpellChecker: no dictionary supplied and window.HunspellDictionaries.en_US ' +
+                    'was not found. Fetch a dictionary from a CDN and set window.HunspellDictionaries.en_US ' +
+                    '(see the setup below) before constructing HunspellSpellChecker.'
+                );
+            }
+
+            this._hunspell = null;
+            this._ignored = new Set();
+            this._ready = this._load(dictionary).catch((error) => {
+                console.error('HunspellSpellChecker: failed to load the Hunspell WASM engine or dictionary.', error);
+                throw error;
+            });
+        }
+
+        async _load(dictionary) {
+            const factory = await getFactory();
+            const encoder = new TextEncoder();
+            const affPath = factory.mountBuffer(encoder.encode(dictionary.aff), 'index.aff');
+            const dicPath = factory.mountBuffer(encoder.encode(dictionary.dic), 'index.dic');
+            this._hunspell = factory.create(affPath, dicPath);
+        }
+
+        /** Resolves once the WASM engine and dictionary have finished loading. */
+        get ready() {
+            return this._ready;
+        }
+
+        async checkWord(word) {
+            await this._ready;
+            if (this._ignored.has(String(word).toLowerCase())) return true;
+            return this._hunspell.spell(word);
+        }
+
+        async suggest(word) {
+            await this._ready;
+            return this._hunspell.suggest(word);
+        }
+
+        addWord(word) {
+            if (!word) return;
+            this._ready.then(() => this._hunspell.addWord(word)).catch(() => {});
+        }
+
+        ignoreWord(word) {
+            if (!word) return;
+            this._ignored.add(String(word).toLowerCase());
+        }
+    }
+
+    global.HunspellSpellChecker = HunspellSpellChecker;
+})(typeof window !== 'undefined' ? window : this);
+</script>
+```
+
+Finally, fetch the dictionary from its CDN and register it on `window.HunspellDictionaries.en_US`. Once that's done, `new HunspellSpellChecker()` (used throughout the rest of this section) picks it up automatically:
+
+```js
+const dictBase = 'https://cdn.jsdelivr.net/npm/hunspell-dict-en-us@0.1.0';
+
+const [aff, dic] = await Promise.all([
+    fetch(`${dictBase}/en-us.aff`).then(r => r.text()),
+    fetch(`${dictBase}/en-us.dic`).then(r => r.text()),
+]);
+window.HunspellDictionaries = { en_US: { aff, dic } };
+
+const editor = document.getElementById('editor');
+editor.setSpellChecker(new HunspellSpellChecker());
+```
+
+`HunspellSpellChecker` loads the WASM engine the first time it's needed, so `setSpellChecker()` can be called immediately once the dictionary fetch above has resolved. A dictionary can also be passed directly instead of relying on the global, by constructing with `new HunspellSpellChecker({ dictionary: { aff, dic } })`.
+
+To use a different language, swap in another CDN dictionary package (e.g. [hunspell-dict-fr-fr](https://www.npmjs.com/package/hunspell-dict-fr-fr)) or any other source of raw `.aff`/`.dic` text — the `dictionary` option only needs the two strings, however you obtain them.
+
+| Online resource                                                                        | Purpose                                                                                                |
+|:---------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------|
+|[jsDelivr](https://www.jsdelivr.com/): `hunspell-asm` `dist/cjs/lib/browser/hunspell.js`|The Hunspell C++ engine compiled to WebAssembly (defines `window.Module`)                               |
+|[jsDelivr](https://www.jsdelivr.com/): `hunspell-dict-en-us` `en-us.aff` / `en-us.dic`  |The `en_US` dictionary in raw Hunspell format, fetched at runtime with `fetch()`                        |
+|Loader script (inlined above)                                                           |Dependency-free browser loader for the WASM engine (defines `window.HunspellAsm`)                       |
+|Adapter script (inlined above)                                                          |Implements rt-native's spellchecker interface on top of Hunspell (defines `window.HunspellSpellChecker`)|
+
+> **License note:** `hunspell-asm` is MIT licensed and `hunspell-dict-en-us` is MIT/BSD licensed; the underlying Hunspell engine itself carries its own MPL/GPL/LGPL tri-license. Other dictionary packages have their own licenses that vary by language (e.g. the French dictionary is MPL-2.0) — review each package's license before distributing your app.
+
+### setSpellChecker()
+
+Configures the active spellchecker. Pass `null` to remove it (clears all squiggles and the Spelling menu).
+
+```js
+editor.setSpellChecker(new HunspellSpellChecker());
+
+// Remove it
+editor.setSpellChecker(null);
+```
+
+### getSpellChecker()
+
+Returns the currently configured spellchecker, or `null`.
+
+```js
+const checker = editor.getSpellChecker();
+```
+
+### setSpellCheckEnabled()
+
+Enables or disables spellcheck marking without clearing the configured spellchecker. See [Enabling / Disabling Spellcheck](#enabling--disabling-spellcheck) above.
+
+```js
+editor.setSpellCheckEnabled(false);
+```
+
+### Writing a Custom Spellchecker
+
+`setSpellChecker()` accepts any object matching this duck-typed interface — Hunspell is just one implementation:
+
+| Method         | Required | Description                                                                                           |
+|:---------------|:---------|:------------------------------------------------------------------------------------------------------|
+|checkWord(word) |yes       |Returns (or resolves to) `true`/`false` — whether `word` is spelled correctly.                         |
+|suggest(word)   |—         |Returns (or resolves to) a `string[]` of suggested corrections, used to populate the Spelling dropdown.|
+|addWord(word)   |—         |Called when the user chooses **Add to Dictionary**. Enables that menu item.                            |
+|ignoreWord(word)|—         |Called when the user chooses **Ignore Word**, in addition to rt-native's own internal ignore list.     |
+
+```js
+editor.setSpellChecker({
+    checkWord: async (word) => myDictionary.has(word.toLowerCase()),
+    suggest:   async (word) => myDictionary.suggest(word),
+    addWord:   (word) => myDictionary.add(word),
+});
+```
+
+`checkWord` and `suggest` may return a plain value or a `Promise` — both are awaited.
+
+---
+
 ## Events
 
 ### change
@@ -498,14 +877,15 @@ rt-native {
 
 ### Content Area Variables
 
-| Variable              | Default         | Description                        |
-|:----------------------|:----------------|:-----------------------------------|
-|--rtb-content-text     |#000             |Editor text color                   |
-|--rtb-content-size     |16px             |Editor font size                    |
-|--rtb-content-font     |Arial, sans-serif|Editor font family                  |
-|--rtb-content-bg       |#FFF             |Editor content background color     |
-|--rtb-content-shadow   |none             |Inner box shadow on the content area|
-|--rtb-placeholder-color|#9ca3af          |Placeholder text color              |
+| Variable                 | Default         | Description                                                                   |
+|:-------------------------|:----------------|:------------------------------------------------------------------------------|
+|--rtb-content-text        |#000             |Editor text color                                                              |
+|--rtb-content-size        |16px             |Editor font size                                                               |
+|--rtb-content-font        |Arial, sans-serif|Editor font family                                                             |
+|--rtb-content-bg          |#FFF             |Editor content background color                                                |
+|--rtb-content-shadow      |none             |Inner box shadow on the content area                                           |
+|--rtb-spellcheck-underline|#e5484d          |Wavy underline color for misspelled words (see [Spellchecking](#spellchecking))|
+|--rtb-placeholder-color   |#9ca3af          |Placeholder text color                                                         |
 
 ---
 
